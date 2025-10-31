@@ -6,7 +6,7 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 06:08:42 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/10/30 21:37:20 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/10/31 19:12:47 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,6 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strdup(const char *s1);
+// Part 2 - Addintional functions
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 #endif

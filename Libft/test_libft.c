@@ -15,6 +15,8 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <limits.h>
 
 #define GREEN "\033[0;32m"
 #define RED "\033[0;31m"
@@ -383,10 +385,11 @@ void test_atoi(void)
 void test_calloc(void)
 {
 	print_test_header("ft_calloc");
+	void *ptr1, *ptr2;
 
-	void *ptr1 = calloc(10, sizeof(int));
-	void *ptr2 = ft_calloc(10, sizeof(int));
-
+	// Test 1: Basic allocation and zero initialization
+	ptr1 = calloc(10, sizeof(int));
+	ptr2 = ft_calloc(10, sizeof(int));
 	if (ptr1 && ptr2)
 	{
 		assert_mem("calloc zeros memory", ptr1, ptr2, 10 * sizeof(int));
@@ -395,10 +398,11 @@ void test_calloc(void)
 	}
 	else
 	{
-		printf(RED "  ✗ calloc allocation failed\n" RESET);
+		printf(RED "  ✗ calloc basic allocation failed\n" RESET);
 		g_tests_failed++;
 	}
 
+	// Test 2: calloc(0, 10) - count is 0
 	ptr1 = calloc(0, 10);
 	ptr2 = ft_calloc(0, 10);
 	if ((ptr1 == NULL && ptr2 == NULL) || (ptr1 != NULL && ptr2 != NULL))
@@ -413,6 +417,92 @@ void test_calloc(void)
 	}
 	if (ptr1) free(ptr1);
 	if (ptr2) free(ptr2);
+
+	// Test 3: calloc(10, 0) - size is 0
+	ptr1 = calloc(10, 0);
+	ptr2 = ft_calloc(10, 0);
+	if ((ptr1 == NULL && ptr2 == NULL) || (ptr1 != NULL && ptr2 != NULL))
+	{
+		printf(GREEN "  ✓ calloc(10, 0) behavior matches\n" RESET);
+		g_tests_passed++;
+	}
+	else
+	{
+		printf(RED "  ✗ calloc(10, 0) behavior differs\n" RESET);
+		g_tests_failed++;
+	}
+	if (ptr1) free(ptr1);
+	if (ptr2) free(ptr2);
+
+	// Test 4: calloc(0, 0) - both are 0
+	ptr1 = calloc(0, 0);
+	ptr2 = ft_calloc(0, 0);
+	if ((ptr1 == NULL && ptr2 == NULL) || (ptr1 != NULL && ptr2 != NULL))
+	{
+		printf(GREEN "  ✓ calloc(0, 0) behavior matches\n" RESET);
+		g_tests_passed++;
+	}
+	else
+	{
+		printf(RED "  ✗ calloc(0, 0) behavior differs\n" RESET);
+		g_tests_failed++;
+	}
+	if (ptr1) free(ptr1);
+	if (ptr2) free(ptr2);
+
+	// Test 5: SIZE_MAX overflow test - should return NULL
+	ptr1 = calloc(SIZE_MAX, 2);
+	ptr2 = ft_calloc(SIZE_MAX, 2);
+	if ((ptr1 == NULL && ptr2 == NULL) || (ptr1 != NULL && ptr2 != NULL))
+	{
+		printf(GREEN "  ✓ calloc(SIZE_MAX, 2) overflow handling matches\n" RESET);
+		g_tests_passed++;
+	}
+	else
+	{
+		printf(RED "  ✗ calloc(SIZE_MAX, 2) overflow handling differs\n" RESET);
+		g_tests_failed++;
+	}
+	if (ptr1) free(ptr1);
+	if (ptr2) free(ptr2);
+
+	// Test 6: Another overflow test
+	ptr1 = calloc(SIZE_MAX / 2, 3);
+	ptr2 = ft_calloc(SIZE_MAX / 2, 3);
+	if ((ptr1 == NULL && ptr2 == NULL) || (ptr1 != NULL && ptr2 != NULL))
+	{
+		printf(GREEN "  ✓ calloc(SIZE_MAX/2, 3) overflow handling matches\n" RESET);
+		g_tests_passed++;
+	}
+	else
+	{
+		printf(RED "  ✗ calloc(SIZE_MAX/2, 3) overflow handling differs\n" RESET);
+		g_tests_failed++;
+	}
+	if (ptr1) free(ptr1);
+	if (ptr2) free(ptr2);
+
+	// Test 7: Large but valid allocation
+	ptr1 = calloc(1000, sizeof(char));
+	ptr2 = ft_calloc(1000, sizeof(char));
+	if (ptr1 && ptr2)
+	{
+		assert_mem("calloc large allocation zeros memory", ptr1, ptr2, 1000);
+		free(ptr1);
+		free(ptr2);
+	}
+	else if (!ptr1 && !ptr2)
+	{
+		printf(GREEN "  ✓ calloc large allocation both failed (low memory)\n" RESET);
+		g_tests_passed++;
+	}
+	else
+	{
+		printf(RED "  ✗ calloc large allocation behavior differs\n" RESET);
+		g_tests_failed++;
+		if (ptr1) free(ptr1);
+		if (ptr2) free(ptr2);
+	}
 }
 
 void test_strdup(void)
@@ -441,6 +531,156 @@ void test_strdup(void)
 		assert_str("strdup(\"\")", s1, s2);
 		free(s1);
 		free(s2);
+	}
+}
+
+void test_substr(void)
+{
+	print_test_header("ft_substr");
+	char *result;
+
+	// Test 1: Extract substring from middle
+	result = ft_substr("Hello World", 6, 5);
+	if (result)
+	{
+		assert_str("substr(\"Hello World\", 6, 5)", "World", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr allocation failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 2: Extract from beginning
+	result = ft_substr("Hello World", 0, 5);
+	if (result)
+	{
+		assert_str("substr(\"Hello World\", 0, 5)", "Hello", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr from beginning failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 3: Extract entire string
+	result = ft_substr("42", 0, 2);
+	if (result)
+	{
+		assert_str("substr(\"42\", 0, 2)", "42", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr entire string failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 4: Length longer than remaining string
+	result = ft_substr("Hello", 2, 100);
+	if (result)
+	{
+		assert_str("substr(\"Hello\", 2, 100)", "llo", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr length overflow failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 5: Start beyond string length (should return empty string)
+	result = ft_substr("Hello", 10, 5);
+	if (result)
+	{
+		assert_str("substr(\"Hello\", 10, 5)", "", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr start beyond length failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 6: Start at end of string
+	result = ft_substr("Hello", 5, 5);
+	if (result)
+	{
+		assert_str("substr(\"Hello\", 5, 5)", "", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr start at end failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 7: Extract with len = 0
+	result = ft_substr("Hello", 2, 0);
+	if (result)
+	{
+		assert_str("substr(\"Hello\", 2, 0)", "", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr len=0 failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 8: Extract from empty string
+	result = ft_substr("", 0, 5);
+	if (result)
+	{
+		assert_str("substr(\"\", 0, 5)", "", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr empty string failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 9: Extract single character
+	result = ft_substr("Hello", 1, 1);
+	if (result)
+	{
+		assert_str("substr(\"Hello\", 1, 1)", "e", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr single char failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 10: Extract last character
+	result = ft_substr("Hello", 4, 1);
+	if (result)
+	{
+		assert_str("substr(\"Hello\", 4, 1)", "o", result);
+		free(result);
+	}
+	else
+	{
+		printf(RED "  ✗ substr last char failed\n" RESET);
+		g_tests_failed++;
+	}
+
+	// Test 11: NULL input (should return NULL)
+	result = ft_substr(NULL, 0, 5);
+	if (result == NULL)
+	{
+		printf(GREEN "  ✓ substr(NULL, 0, 5) returns NULL\n" RESET);
+		g_tests_passed++;
+	}
+	else
+	{
+		printf(RED "  ✗ substr(NULL, 0, 5) should return NULL\n" RESET);
+		g_tests_failed++;
+		free(result);
 	}
 }
 
@@ -473,6 +713,7 @@ int main(void)
 	test_atoi();
 	test_calloc();
 	test_strdup();
+	test_substr();
 
 	printf("\n======================================\n");
 	printf("   TEST RESULTS\n");
