@@ -6,7 +6,7 @@
 #    By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/28 05:10:43 by bkhilo            #+#    #+#              #
-#    Updated: 2025/10/30 18:35:26 by bkhilo           ###   ########.fr        #
+#    Updated: 2025/10/31 10:14:36 by bkhilo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,3 +61,9 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+test: $(NAME)
+	$(CC) $(CFLAGS) test_libft.c -L. -lft -o test_libft
+	$(MAKE) fclean
+	-./test_libft
+	@rm -f test_libft
