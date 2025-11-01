@@ -6,13 +6,14 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 06:08:42 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/10/31 19:12:47 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/11/01 03:53:17 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <stdio.h>
+# include <unistd.h>
 # include <stdlib.h>
 // Part 1 - Libc functions
 int		ft_isalpha(int c);
@@ -40,4 +41,14 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_strdup(const char *s1);
 // Part 2 - Addintional functions
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strtrim(char const *s1, char const *set);
+char	**ft_split(char const *s, char c);
+char	*ft_itoa(int n);
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+void	ft_striteri(char *s, void (*f)(unsigned int, char*));
+void	ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_putendl_fd(char *s, int fd);
+void	ft_putnbr_fd(int n, int fd);
 #endif

@@ -6,7 +6,7 @@
 #    By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/28 05:10:43 by bkhilo            #+#    #+#              #
-#    Updated: 2025/10/31 19:13:46 by bkhilo           ###   ########.fr        #
+#    Updated: 2025/11/01 03:57:00 by bkhilo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,17 @@ SRCS = ft_isalpha.c \
 	ft_atoi.c		\
 	ft_calloc.c		\
 	ft_strdup.c		\
-	ft_substr.c
+	ft_substr.c		\
+	ft_strjoin.c	\
+	ft_strtrim.c    \
+	ft_split.c		\
+	ft_itoa.c		\
+	ft_strmapi.c	\
+	ft_striteri.c	\
+	ft_putchar_fd.c \
+	ft_putstr_fd.c  \
+	ft_putendl_fd.c \
+	ft_putnbr_fd.c
 
 # Object files "substitution reference"
 OBJS = $(SRCS:.c=.o)
