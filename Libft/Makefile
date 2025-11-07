@@ -6,7 +6,7 @@
 #    By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/28 05:10:43 by bkhilo            #+#    #+#              #
-#    Updated: 2025/11/07 06:40:58 by bkhilo           ###   ########.fr        #
+#    Updated: 2025/11/07 20:57:55 by bkhilo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,11 +87,5 @@ fclean: clean
 	rm -f $(NAME)	
 
 re: fclean all
-
-test: bonus 
-	$(CC) $(CFLAGS) test_libft.c -L. -lft -o test_libft
-	$(MAKE) fclean
-	-./test_libft
-	@rm -f test_libft
 
 .PHONY: all clean fclean re bonus test	

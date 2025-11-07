@@ -6,7 +6,7 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 17:56:02 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/10/31 17:45:13 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/11/07 23:51:22 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void	*ptr;
+	size_t	sum;
+	void	*result;
 
-	if ((count * size) == 0)
-		ptr = malloc(1);
-	else
-		ptr = malloc(count * size);
-	if (ptr == NULL)
+	sum = count * size;
+	result = malloc(sum);
+	if (result == NULL)
 		return (NULL);
-	ft_bzero(ptr, count * size);
-	return (ptr);
+	ft_bzero(result, sum);
+	return (result);
 }

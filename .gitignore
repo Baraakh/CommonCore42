@@ -9,3 +9,5 @@ en.subject.pdf
 
 # norm
 .normignore
+
+.python-version
