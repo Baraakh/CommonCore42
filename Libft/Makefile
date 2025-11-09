@@ -6,7 +6,7 @@
 #    By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/28 05:10:43 by bkhilo            #+#    #+#              #
-#    Updated: 2025/11/07 20:57:55 by bkhilo           ###   ########.fr        #
+#    Updated: 2025/11/09 19:45:30 by bkhilo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,4 +88,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus test	
+.PHONY: all clean fclean re bonus	

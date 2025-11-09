@@ -6,13 +6,12 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 06:08:42 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/11/07 05:12:05 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/11/09 19:45:35 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 
