@@ -6,7 +6,7 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 06:08:42 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/11/09 19:45:35 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/11/10 23:34:39 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <unistd.h>
 # include <stdlib.h>
+# include <limits.h>
 
 typedef struct s_list
 {
