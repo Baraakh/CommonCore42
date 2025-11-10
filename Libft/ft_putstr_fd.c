@@ -6,7 +6,7 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 03:37:54 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/11/01 03:45:57 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/11/11 00:07:12 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	int	i;
+	size_t	len;
 
-	i = 0;
-	while (s[i] != '\0')
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
+	len = ft_strlen(s);
+	write(fd, s, len);
 }
