@@ -6,11 +6,11 @@
 #    By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/28 05:10:43 by bkhilo            #+#    #+#              #
-#    Updated: 2025/11/09 19:45:30 by bkhilo           ###   ########.fr        #
+#    Updated: 2025/11/13 19:14:34 by bkhilo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 NAME = libft.a
