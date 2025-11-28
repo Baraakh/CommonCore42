@@ -6,7 +6,7 @@
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 06:52:16 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/11/28 05:43:51 by bkhilo           ###   ########.fr       */
+/*   Updated: 2025/11/28 09:18:31 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@
 
 char	*get_next_line(int fd);
 
-int		ft_check_newline(const char *s, size_t *index);
 char	*ft_substr_resolve(char **current_line, size_t index);
+char	*ft_handle_rest(char **current_line);
+char	*join_and_check(char **current_line, char *buffer);
 char	*process_next_line(int fd, char **current_line, char *buffer,
 			size_t bytes_read);
 
