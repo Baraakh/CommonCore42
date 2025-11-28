@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bkhilo <bkhilo@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 07:02:12 by bkhilo            #+#    #+#             */
-/*   Updated: 2025/11/28 10:08:37 by bkhilo           ###   ########.fr       */
+/*   Created: 2025/11/28 09:42:33 by bkhilo            #+#    #+#             */
+/*   Updated: 2025/11/28 10:19:03 by bkhilo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_substr_resolve(char **current_line, size_t index)
 {
@@ -111,28 +111,28 @@ char	*process_next_line(int fd, char **current_line, char *buffer
 
 char	*get_next_line(int fd)
 {
-	static char	*current_line;
+	static char	*current_line[OPEN_MAX];
 	char		*buffer;
 	size_t		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > SIZE_MAX)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0 || BUFFER_SIZE > SIZE_MAX)
 		buffer = NULL;
 	else
 		buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 	{
-		free(current_line);
-		current_line = NULL;
+		free(current_line[fd]);
+		current_line[fd] = NULL;
 		return (NULL);
 	}
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == SIZE_MAX)
 	{
 		free(buffer);
-		free(current_line);
-		current_line = NULL;
+		free(current_line[fd]);
+		current_line[fd] = NULL;
 		return (NULL);
 	}
 	buffer[bytes_read] = '\0';
-	return (process_next_line(fd, &current_line, buffer, bytes_read));
+	return (process_next_line(fd, &(current_line[fd]), buffer, bytes_read));
 }
