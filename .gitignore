@@ -3,12 +3,15 @@ test_libft.c
 
 # Documentation
 CLAUDE.md
+GEMINI.md
 
 # Subject PDF
 en.subject.pdf
 GNL/filename.txt
+GNL/filename1.txt
 
 # norm
 .normignore
 
 .python-version
+test.c
