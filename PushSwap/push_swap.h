@@ -1,4 +1,16 @@
-# ifndef PUSH_SWAP_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkhilo <bkhilo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/15 21:09:34 by bkhilo            #+#    #+#             */
+/*   Updated: 2026/05/15 21:19:17 by bkhilo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
 # include <unistd.h>
@@ -39,4 +51,4 @@ void	op_rrb(t_stack **b);
 void	sort_small(t_stack **a, t_stack **b, int size);
 void	sort_chunk(t_stack **a, t_stack **b, int size);
 
-# endif
+#endif
