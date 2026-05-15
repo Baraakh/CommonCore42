@@ -15,7 +15,9 @@ int	main(int argc, char **argv)
 			sort_two(a);
 		else if (a->size == 3)
 			sort_three(a);
-		else if (a->size > 3)
+		else if (a->size == 5)
+			sort_five(a, b);
+		else
 			radix_sort(a, b);
 	}
 	free_stack(a);

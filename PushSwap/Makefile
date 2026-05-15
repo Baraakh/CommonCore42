@@ -12,6 +12,7 @@ SRCS	= srcs/main.c \
 		  srcs/operations_b.c \
 		  srcs/operations_both.c \
 		  srcs/sort_small.c \
+		  srcs/sort_five.c \
 		  srcs/sort_radix.c
 
 OBJS	= $(SRCS:.c=.o)
