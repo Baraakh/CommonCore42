@@ -5,15 +5,14 @@ CFLAGS	= -Wall -Wextra -Werror -I.
 
 SRCS	= srcs/main.c \
 		  srcs/parse.c \
-		  srcs/parse_utils.c \
-		  srcs/stack_utils.c \
-		  srcs/operations_utils.c \
-		  srcs/operations_a.c \
-		  srcs/operations_b.c \
-		  srcs/operations_both.c \
+		  srcs/list.c \
+		  srcs/utils.c \
+		  srcs/position.c \
+		  srcs/ops_swap_push.c \
+		  srcs/ops_rotate.c \
+		  srcs/ops_rev_rotate.c \
 		  srcs/sort_small.c \
-		  srcs/sort_five.c \
-		  srcs/sort_radix.c
+		  srcs/sort_chunk.c
 
 OBJS	= $(SRCS:.c=.o)
 

@@ -1,39 +1,62 @@
 #include "push_swap.h"
 
-static void	sort_three_ops(t_stack *a, int top, int mid, int bot)
+static void	sort_three(t_stack **a)
 {
-	if (top > mid && mid < bot && top < bot)
+	int	first;
+	int	second;
+	int	third;
+
+	first = (*a)->index;
+	second = (*a)->next->index;
+	third = (*a)->next->next->index;
+	if (first > second && second < third && first < third)
 		op_sa(a);
-	else if (top < mid && top < bot && mid > bot)
+	else if (first > second && second > third)
 	{
-		op_rra(a);
 		op_sa(a);
+		op_rra(a);
 	}
-	else if (top > mid && mid < bot && top > bot)
+	else if (first > second && second < third && first > third)
 		op_ra(a);
-	else if (top < mid && top > bot)
-		op_rra(a);
-	else if (top > mid && mid > bot)
+	else if (first < second && second > third && first < third)
 	{
 		op_sa(a);
-		op_rra(a);
+		op_ra(a);
 	}
+	else if (first < second && second > third && first > third)
+		op_rra(a);
 }
 
-void	sort_two(t_stack *a)
+static void	move_min_to_b(t_stack **a, t_stack **b)
 {
-	if (a->top->val > a->top->next->val)
+	int	pos;
+	int	size;
+
+	pos = min_pos(*a);
+	size = stack_size(*a);
+	if (pos <= size / 2)
+		while (pos-- > 0)
+			op_ra(a);
+	else
+		while (pos++ < size)
+			op_rra(a);
+	op_pb(a, b);
+}
+
+void	sort_small(t_stack **a, t_stack **b, int size)
+{
+	if (size == 2)
+	{
 		op_sa(a);
-}
-
-void	sort_three(t_stack *a)
-{
-	int	top;
-	int	mid;
-	int	bot;
-
-	top = a->top->val;
-	mid = a->top->next->val;
-	bot = a->top->next->next->val;
-	sort_three_ops(a, top, mid, bot);
+		return ;
+	}
+	while (size > 3)
+	{
+		move_min_to_b(a, b);
+		size--;
+	}
+	if (!is_sorted(*a))
+		sort_three(a);
+	while (*b)
+		op_pa(a, b);
 }

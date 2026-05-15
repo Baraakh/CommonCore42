@@ -1,26 +1,35 @@
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+static void	run_sort(t_stack **a, t_stack **b)
+{
+	int	size;
+
+	set_indexes(*a);
+	size = stack_size(*a);
+	if (size <= 6)
+		sort_small(a, b, size);
+	else
+		sort_chunk(a, b, size);
+}
+
+int	main(int ac, char **av)
 {
 	t_stack	*a;
 	t_stack	*b;
 
-	if (argc < 2)
+	a = NULL;
+	b = NULL;
+	if (ac == 1)
 		return (0);
-	a = parse_args(argv + 1);
-	b = new_stack();
-	if (!is_sorted(a))
+	if (!parse_args(ac, av, &a))
 	{
-		if (a->size == 2)
-			sort_two(a);
-		else if (a->size == 3)
-			sort_three(a);
-		else if (a->size == 5)
-			sort_five(a, b);
-		else
-			radix_sort(a, b);
+		free_stack(&a);
+		put_error();
+		return (1);
 	}
-	free_stack(a);
-	free_stack(b);
+	if (!is_sorted(a))
+		run_sort(&a, &b);
+	free_stack(&a);
+	free_stack(&b);
 	return (0);
 }
