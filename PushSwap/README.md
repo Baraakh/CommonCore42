@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by bkhilo.*
+_This project has been created as part of the 42 curriculum by bkhilo._
 
 ## Description
 
@@ -7,12 +7,36 @@
 The program reads a list of integers, builds them into stack `a`, and outputs the sequence of operations to sort the stack in ascending order (smallest on top). Stack `b` is used as a temporary buffer.
 
 **Available operations:**
-- `sa` / `sb` / `ss` — swap top two elements of stack a / b / both
-- `pa` / `pb` — push top element from b to a / from a to b
-- `ra` / `rb` / `rr` — rotate stack a / b / both (top → bottom)
-- `rra` / `rrb` / `rrr` — reverse rotate stack a / b / both (bottom → top)
 
-**Algorithm used:** Radix Sort with index normalization for large inputs, with hand-optimized routines for 2, 3, and 5 elements.
+- `sa` / `sb` — swap top two elements of stack a / b
+- `pa` / `pb` — push top element from b to a / from a to b
+- `ra` / `rb` — rotate stack a / b (top → bottom)
+- `rra` / `rrb` — reverse rotate stack a / b (bottom → top)
+
+**Algorithm used:** Chunk Sort for large inputs (n > 6), with a dedicated small sort for 2–6 elements.
+
+### How the chunk sort works
+
+1. **Index assignment** — `set_indexes()` walks the list and assigns each node a rank from `0` (smallest value) to `n-1` (largest), stored in the `index` field alongside the original `value`.
+
+2. **Push to b in chunks** — `push_to_b()` scans stack a repeatedly. Elements whose index falls in the current chunk window are pushed to b. Very small-index elements (already "done") are pushed to b's bottom via an extra `rb`. Elements outside the window are rotated past with `ra`. This groups elements in b roughly from largest (top) to smallest (bottom).
+
+3. **Pull max back to a** — `move_max_to_a()` finds the highest-index element in b, rotates it to the top with `rb`/`rrb` (whichever is shorter), then `pa`. Repeating this until b is empty reconstructs a in sorted order with the smallest value on top.
+
+**Small sort (size ≤ 6):**
+
+- Size 2: single `sa` if unsorted.
+- Size 3: hardcoded comparison of the three indexes — at most 2 operations.
+- Size 4–6: move the minimum to b repeatedly until 3 remain, apply the 3-element sort, then push b back with `pa`.
+
+**Performance results:**
+
+| Input size  | Operations     | Grade                  |
+| ----------- | -------------- | ---------------------- |
+| 3 numbers   | ≤ 2 ops        | —                      |
+| 5 numbers   | ≤ 10 ops       | —                      |
+| 100 numbers | ~560–590 ops   | **5 / 5 pts** (< 700)  |
+| 500 numbers | ~5000–5300 ops | **5 / 5 pts** (< 5500) |
 
 ## Instructions
 
@@ -31,56 +55,55 @@ make
 
 ```bash
 ./push_swap <integers>
-# or
-./push_swap "<space-separated integers>"
+# or with a quoted string
+./push_swap "3 1 2 5 4"
 ```
 
 ### Examples
 
 ```bash
-./push_swap 3 1 2         # outputs: ra
-./push_swap "5 3 1 4 2"   # outputs operations to sort
+# Simple sort
+./push_swap 3 1 2
 
-# Count operations for 100 numbers
-ARG=$(shuf -i 1-1000 -n 100 | tr '\n' ' ')
+# Count operations for 100 random numbers
+ARG=$(python3 -c "import random; print(' '.join(map(str, random.sample(range(1,1001), 100))))")
 ./push_swap $ARG | wc -l
 
-# Verify correctness with checker
+# Count operations for 500 random numbers
+ARG=$(python3 -c "import random; print(' '.join(map(str, random.sample(range(1,10001), 500))))")
+./push_swap $ARG | wc -l
+
+# Verify correctness with the 42 checker
 ARG="3 2 1"
 ./push_swap $ARG | ./checker_OS $ARG
 ```
 
 ### Makefile targets
 
-| Target   | Description                        |
-|----------|------------------------------------|
-| `make`   | Compile the binary                 |
-| `make clean` | Remove object files           |
-| `make fclean` | Remove objects and binary    |
-| `make re` | Full recompile                    |
+| Target        | Description                    |
+| ------------- | ------------------------------ |
+| `make`        | Compile the binary             |
+| `make clean`  | Remove object files            |
+| `make fclean` | Remove object files and binary |
+| `make re`     | Full recompile                 |
 
 ### Error cases
 
 The program writes `Error` to stderr and exits with code 1 on:
-- Non-numeric arguments
-- Integers outside `[INT_MIN, INT_MAX]`
-- Duplicate values
+
+- Non-numeric arguments (e.g. `./push_swap 1 abc 3`)
+- Integers outside `[INT_MIN, INT_MAX]` (e.g. `./push_swap 2147483648`)
+- Duplicate values (e.g. `./push_swap 1 2 1`)
+
+No output and exit 0 when called with no arguments.
 
 ## Resources
 
-- [42 push_swap subject](https://cdn.intra.42.fr/pdf/pdf/131674/en.subject.pdf)
-- [Radix sort explanation — Wikipedia](https://en.wikipedia.org/wiki/Radix_sort)
+- 42 push_swap subject
 - [Linked list data structure — GeeksForGeeks](https://www.geeksforgeeks.org/linked-list-data-structure/)
 - [42 Norminette](https://github.com/42School/norminette)
 
-### AI Usage
+## AI Usage
 
-This project was implemented with assistance from **Claude (Anthropic)** via Claude Code CLI.
-
-AI was used for:
-- **Project structure design** — deciding how to split functions across files to comply with the 42 Norminette (≤5 functions per file, ≤25 lines per function)
-- **Algorithm implementation** — radix sort with normalization, small-case sorts (2, 3, 5 elements), and all 11 stack operations
-- **Error handling** — integer overflow detection, duplicate checking, and single-string argument parsing
-- **Testing and validation** — running the evaluation checklist, checking move counts against the grade thresholds, and verifying sort correctness with a Python simulator
-
-The core algorithm choices (radix sort, the `sort_five` rotation approach) and all code were generated and verified with AI assistance. Final understanding and any evaluation adjustments remain the student's responsibility.
+- I have used AI to test my code on different cases, to make sure there is no memory leaks problems or runtime bugs.
+- Used it also for formatting the README file.
