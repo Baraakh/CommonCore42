@@ -1,0 +1,40 @@
+import sys
+
+
+def parse_scores(args: list[str]) -> tuple[list[int], list[str]]:
+    scores: list[int] = []
+    invalid: list[str] = []
+    for arg in args:
+        try:
+            scores.append(int(arg))
+        except ValueError:
+            invalid.append(arg)
+    return scores, invalid
+
+
+def main() -> None:
+    print("=== Player Score Analytics ===")
+    raw = sys.argv[1:]
+    scores, invalid = parse_scores(raw)
+    for inv in invalid:
+        print(f"Invalid parameter: '{inv}'")
+    if not scores:
+        print(
+            "No scores provided. Usage: python3 ft_score_analytics.py"
+            " <score1> <score2> ..."
+        )
+        return
+    total = sum(scores)
+    average = total / len(scores)
+    score_range = max(scores) - min(scores)
+    print(f"Scores processed: {scores}")
+    print(f"Total players: {len(scores)}")
+    print(f"Total score: {total}")
+    print(f"Average score: {average}")
+    print(f"High score: {max(scores)}")
+    print(f"Low score: {min(scores)}")
+    print(f"Score range: {score_range}")
+
+
+if __name__ == "__main__":
+    main()
