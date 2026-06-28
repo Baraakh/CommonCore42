@@ -1,23 +1,14 @@
 import sys
 
 
-def parse_scores(args: list[str]) -> tuple[list[int], list[str]]:
+def main() -> None:
+    print("=== Player Score Analytics ===")
     scores: list[int] = []
-    invalid: list[str] = []
-    for arg in args:
+    for arg in sys.argv[1:]:
         try:
             scores.append(int(arg))
         except ValueError:
-            invalid.append(arg)
-    return scores, invalid
-
-
-def main() -> None:
-    print("=== Player Score Analytics ===")
-    raw = sys.argv[1:]
-    scores, invalid = parse_scores(raw)
-    for inv in invalid:
-        print(f"Invalid parameter: '{inv}'")
+            print(f"Invalid parameter: '{arg}'")
     if not scores:
         print(
             "No scores provided. Usage: python3 ft_score_analytics.py"

@@ -25,34 +25,32 @@ def gen_player_achievements() -> set[str]:
 
 def main() -> None:
     print("=== Achievement Tracker System ===")
-    players: dict[str, set[str]] = {
-        "Alice": gen_player_achievements(),
-        "Bob": gen_player_achievements(),
-        "Charlie": gen_player_achievements(),
-        "Dylan": gen_player_achievements(),
-    }
-    for name, achievements in players.items():
-        print(f"Player {name}: {achievements}")
-    all_achievements: set[str] = set()
-    for ach in players.values():
-        all_achievements = all_achievements.union(ach)
+    alice = gen_player_achievements()
+    bob = gen_player_achievements()
+    charlie = gen_player_achievements()
+    dylan = gen_player_achievements()
+    print(f"Player Alice: {alice}")
+    print(f"Player Bob: {bob}")
+    print(f"Player Charlie: {charlie}")
+    print(f"Player Dylan: {dylan}")
+    all_achievements = alice.union(bob).union(charlie).union(dylan)
     print(f"\nAll distinct achievements: {all_achievements}")
-    common: set[str] = set(ALL_ACHIEVEMENTS)
-    for ach in players.values():
-        common = common.intersection(ach)
+    common = alice.intersection(bob).intersection(charlie).intersection(dylan)
     print(f"\nCommon achievements: {common}")
     print()
-    for name, achievements in players.items():
-        others: set[str] = set()
-        for other_name, other_ach in players.items():
-            if other_name != name:
-                others = others.union(other_ach)
-        unique = achievements.difference(others)
-        print(f"Only {name} has: {unique}")
+    only_alice = alice.difference(bob.union(charlie).union(dylan))
+    only_bob = bob.difference(alice.union(charlie).union(dylan))
+    only_charlie = charlie.difference(alice.union(bob).union(dylan))
+    only_dylan = dylan.difference(alice.union(bob).union(charlie))
+    print(f"Only Alice has: {only_alice}")
+    print(f"Only Bob has: {only_bob}")
+    print(f"Only Charlie has: {only_charlie}")
+    print(f"Only Dylan has: {only_dylan}")
     print()
-    for name, achievements in players.items():
-        missing = all_achievements.difference(achievements)
-        print(f"{name} is missing: {missing}")
+    print(f"Alice is missing: {all_achievements.difference(alice)}")
+    print(f"Bob is missing: {all_achievements.difference(bob)}")
+    print(f"Charlie is missing: {all_achievements.difference(charlie)}")
+    print(f"Dylan is missing: {all_achievements.difference(dylan)}")
 
 
 if __name__ == "__main__":

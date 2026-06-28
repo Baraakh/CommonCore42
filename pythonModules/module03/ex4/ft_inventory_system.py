@@ -29,8 +29,8 @@ def main() -> None:
     print(f"Item list: {list(inventory.keys())}")
     total = sum(inventory.values())
     print(f"Total quantity of the {len(inventory)} items: {total}")
-    for item, qty in inventory.items():
-        pct = round(qty / total * 100, 1)
+    for item in inventory.keys():
+        pct = round(inventory[item] / total * 100, 1)
         print(f"Item {item} represents {pct}%")
     if inventory:
         most = max(inventory.keys(), key=lambda k: inventory[k])
@@ -45,4 +45,5 @@ def main() -> None:
     print(f"Updated inventory: {inventory}")
 
 
-main()
+if __name__ == "__main__":
+    main()
