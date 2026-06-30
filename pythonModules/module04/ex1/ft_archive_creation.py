@@ -1,8 +1,9 @@
+import io
 import sys
 import typing
 
 
-def read_file(filename: str) -> str | None:
+def display_original(filename: str) -> bool:
     print("=== Cyber Archives Recovery & Preservation ===")
     print(f"Accessing file '{filename}'")
     f: typing.TextIO
@@ -10,66 +11,92 @@ def read_file(filename: str) -> str | None:
         f = open(filename, "r", encoding="utf-8")
     except OSError as e:
         print(f"Error opening file '{filename}': {e}")
-        return None
-    content: str = ""
-    read_ok: bool = False
+        return False
+    ok: bool = False
     try:
-        content = f.read()
         print("---\n")
-        print(content, end="")
+        while chunk := f.read(io.DEFAULT_BUFFER_SIZE):
+            print(chunk, end="")
         print("\n---")
-        read_ok = True
+        ok = True
     except OSError as e:
         print(f"\nError reading file '{filename}': {e}")
     finally:
         f.close()
         print(f"File '{filename}' closed.")
-    return content if read_ok else None
+    return ok
 
 
-def transform(content: str) -> str:
-    lines: list[str] = content.split("\n")
-    tagged: list[str] = [line + "#" if line else line for line in lines]
-    return "\n".join(tagged)
-
-
-def write_file(filename: str, content: str) -> None:
-    print(f"Saving data to '{filename}'")
+def display_transformed(filename: str) -> bool:
     f: typing.TextIO
     try:
-        f = open(filename, "w", encoding="utf-8")
+        f = open(filename, "r", encoding="utf-8")
+    except OSError as e:
+        print(f"Error opening file '{filename}': {e}")
+        return False
+    ok: bool = False
+    try:
+        print("---\n")
+        for line in f:
+            stripped: str = line.rstrip("\n")
+            print(stripped + "#" if stripped else stripped)
+        print("\n---")
+        ok = True
+    except OSError as e:
+        print(f"\nError reading file '{filename}': {e}")
+    finally:
+        f.close()
+    return ok
+
+
+def save_transformed(filename: str, out_name: str) -> None:
+    f_in: typing.TextIO
+    try:
+        f_in = open(filename, "r", encoding="utf-8")
     except OSError as e:
         print(f"Error opening file '{filename}': {e}")
         return
-    write_ok: bool = False
+    f_out: typing.TextIO
     try:
-        f.write(content)
-        write_ok = True
+        f_out = open(out_name, "w", encoding="utf-8")
     except OSError as e:
-        print(f"\nError writing file '{filename}': {e}")
+        print(f"Error opening file '{out_name}': {e}")
+        f_in.close()
+        return
+    try:
+        for line in f_in:
+            stripped: str = line.rstrip("\n")
+            f_out.write(stripped + "#\n" if stripped else "\n")
+        print(f"Data saved in file '{out_name}'.")
+        return
+    except OSError as e:
+        print(f"\nError writing file '{out_name}': {e}")
+        return
     finally:
-        f.close()
-    if write_ok:
-        print(f"Data saved in file '{filename}'.")
+        f_out.close()
+        f_in.close()
 
 
 def main() -> None:
     if len(sys.argv) != 2:
         print("Usage: ft_archive_creation.py <file>")
         return
-    content: str | None = read_file(sys.argv[1])
-    if content is None:
+    filename: str = sys.argv[1]
+    if not display_original(filename):
         return
-    transformed: str = transform(content)
     print("\nTransform data:")
-    print("---\n")
-    print(transformed, end="")
-    print("\n---")
-    name: str = input("Enter new file name (or empty): ").strip()
+    if not display_transformed(filename):
+        return
+    try:
+        name: str = input("Enter new file name (or empty): ").strip()
+    except EOFError:
+        print()
+        name = ""
     if not name:
         print("Not saving data.")
         return
-    write_file(name, transformed)
+    print(f"Saving data to '{name}'")
+    save_transformed(filename, name)
 
 
 if __name__ == "__main__":

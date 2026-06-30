@@ -1,7 +1,5 @@
 def secure_archive(
-    filename: str,
-    mode: str = "r",
-    content: str = ""
+    filename: str, mode: str = "r", content: str = ""
 ) -> tuple[bool, str]:
     try:
         with open(filename, mode) as f:
@@ -14,8 +12,7 @@ def secure_archive(
 
 
 def main() -> None:
-    print("=== Cyber Archives Security ===")
-    print()
+    print("=== Cyber Archives Security ===\n")
 
     print("Using 'secure_archive' to read from a nonexistent file:")
     result: tuple[bool, str] = secure_archive("/not/existing/file")

@@ -1,94 +1,100 @@
+import io
 import sys
 import typing
 
 
-def read_file(filename: str) -> str | None:
+def display_original(filename: str) -> bool:
     print("=== Cyber Archives Recovery & Preservation ===")
     print(f"Accessing file '{filename}'")
-    f: typing.IO[str]
+    f: typing.TextIO
     try:
-        f = open(filename)
+        f = open(filename, "r", encoding="utf-8")
     except OSError as e:
         sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}\n")
-        return None
-    lines: list[str] = []
-    read_ok: bool = False
+        return False
+    ok: bool = False
     try:
-        print("---")
-        print()
-        line: str = f.readline()
-        while line:
-            print(line, end="")
-            lines.append(line)
-            line = f.readline()
-        print()
-        print("---")
-        read_ok = True
+        print("---\n")
+        while chunk := f.read(io.DEFAULT_BUFFER_SIZE):
+            sys.stdout.write(chunk)
+        print("\n---")
+        ok = True
     except OSError as e:
-        sys.stderr.write(
-            f"[STDERR] Error reading file '{filename}': {e}\n"
-        )
+        sys.stderr.write(f"[STDERR] Error reading file '{filename}': {e}\n")
     finally:
         f.close()
         print(f"File '{filename}' closed.")
-    return "".join(lines) if read_ok else None
+    return ok
 
 
-def transform(content: str) -> str:
-    parts: list[str] = content.split("\n")
-    tagged: list[str] = [p + "#" if p else p for p in parts]
-    return "\n".join(tagged)
-
-
-def write_file(filename: str, content: str) -> None:
-    print(f"Saving data to '{filename}'")
-    f: typing.IO[str]
+def display_transformed(filename: str) -> bool:
+    f: typing.TextIO
     try:
-        f = open(filename, "w")
+        f = open(filename, "r", encoding="utf-8")
     except OSError as e:
-        sys.stderr.write(
-            f"[STDERR] Error opening file '{filename}': {e}\n"
-        )
-        print("Data not saved.")
-        return
-    write_ok: bool = False
+        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}\n")
+        return False
+    ok: bool = False
     try:
-        f.write(content)
-        write_ok = True
+        print("---\n")
+        for line in f:
+            stripped: str = line.rstrip("\n")
+            sys.stdout.write(stripped + "#\n" if stripped else "\n")
+        print("\n---")
+        ok = True
     except OSError as e:
-        sys.stderr.write(
-            f"[STDERR] Error writing file '{filename}': {e}\n"
-        )
+        sys.stderr.write(f"[STDERR] Error reading file '{filename}': {e}\n")
     finally:
         f.close()
-    if write_ok:
-        print(f"Data saved in file '{filename}'.")
-    else:
-        print("Data not saved.")
+    return ok
+
+
+def save_transformed(filename: str, out_name: str) -> None:
+    f_in: typing.TextIO
+    try:
+        f_in = open(filename, "r", encoding="utf-8")
+    except OSError as e:
+        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}\n")
+        return
+    f_out: typing.TextIO
+    try:
+        f_out = open(out_name, "w", encoding="utf-8")
+    except OSError as e:
+        sys.stderr.write(f"[STDERR] Error opening file '{out_name}': {e}\n")
+        f_in.close()
+        return
+    try:
+        for line in f_in:
+            stripped: str = line.rstrip("\n")
+            f_out.write(stripped + "#\n" if stripped else "\n")
+        print(f"Data saved in file '{out_name}'.")
+        return
+    except OSError as e:
+        sys.stderr.write(f"[STDERR] Error writing file '{out_name}': {e}\n")
+        return
+    finally:
+        f_out.close()
+        f_in.close()
 
 
 def main() -> None:
     if len(sys.argv) != 2:
-        print("Usage: ft_stream_management.py <file>")
+        sys.stderr.write("[STDERR] Usage: ft_stream_management.py <file>\n")
         return
-    content: str | None = read_file(sys.argv[1])
-    if content is None:
+    filename: str = sys.argv[1]
+    if not display_original(filename):
         return
-    transformed: str = transform(content)
-    print()
-    print("Transform data:")
-    print("---")
-    print()
-    print(transformed, end="")
-    print()
-    print("---")
+    print("\nTransform data:")
+    if not display_transformed(filename):
+        return
     sys.stdout.write("Enter new file name (or empty): ")
     sys.stdout.flush()
-    name: str = sys.stdin.readline().rstrip("\n")
+    name: str = sys.stdin.readline().rstrip("\n").strip()
     if not name:
-        print("Not saving data.")
+        sys.stderr.write("[STDERR] Not saving data.\n")
         return
-    write_file(name, transformed)
+    print(f"Saving data to '{name}'")
+    save_transformed(filename, name)
 
 
 if __name__ == "__main__":
