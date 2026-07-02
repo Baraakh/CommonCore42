@@ -21,10 +21,10 @@ class DataProcessor(ABC):
         """output ingested data"""
         try:
             data: str = self._data_storage.pop(0)
+            self._process_rank += 1
+            return self._process_rank, data
         except IndexError as e:
             raise IndexError("No data to output") from e
-        self._process_rank += 1
-        return self._process_rank, data
 
 
 class NumericProcessor(DataProcessor):
@@ -89,12 +89,10 @@ class LogProcessor(DataProcessor):
         if not self.validate(data):
             raise ValueError("Improper log data")
         if isinstance(data, dict):
-            self._data_storage.append(
-                f"{data['log_level']}: {data['log_message']}"
-            )
+            self._data_storage.append(": ".join(str(v) for v in data.values()))
         elif isinstance(data, list):
             self._data_storage.extend(
-                f"{item['log_level']}: {item['log_message']}" for item in data
+                ": ".join(str(v) for v in item.values()) for item in data
             )
 
 
@@ -123,7 +121,7 @@ def main() -> None:
 
     print("\nTesting Text Processor...")
     text_processor = TextProcessor()
-    print(f" Trying to validate input '42': {text_processor.validate('42')}")
+    print(f" Trying to validate input '42': {text_processor.validate(42)}")
     print(" Processing data: ['Hello', 'Nexus', 'World']")
     text_processor.ingest(["Hello", "Nexus", "World"])
     print(" Extracting 1 values...")
